@@ -5,13 +5,13 @@ import AICore from './ai-core/AICore'
 const Experience = () => {
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 2, 10]} fov={50} />
+      <PerspectiveCamera makeDefault position={[0, 4, 15]} fov={45} />
       <OrbitControls 
         enableDamping 
-        maxPolarAngle={Math.PI / 1.8} 
-        minDistance={3} 
-        maxDistance={20}
-        target={[0, 1.5, 0]}
+        maxPolarAngle={Math.PI / 2} 
+        minDistance={5} 
+        maxDistance={25}
+        target={[0, 2, 0]}
       />
       
       <color attach="background" args={['#050816']} />
