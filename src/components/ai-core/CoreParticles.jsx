@@ -4,40 +4,38 @@ import * as THREE from 'three'
 
 const CoreParticles = () => {
   const pointsRef = useRef()
-  const count = 150
+  const count = 200
 
-  const [positions, phases] = useMemo(() => {
-    const pos = new Float32Array(count * 3)
-    const pha = new Float32Array(count)
+  // Layer 5: Particle Orbit System
+  const [particles] = useMemo(() => {
+    const data = []
     for (let i = 0; i < count; i++) {
-      const theta = THREE.MathUtils.randFloat(0, Math.PI * 2)
-      const phi = THREE.MathUtils.randFloat(0, Math.PI)
-      const distance = THREE.MathUtils.randFloat(1.5, 3)
-      
-      pos[i * 3] = distance * Math.sin(phi) * Math.cos(theta)
-      pos[i * 3 + 1] = distance * Math.sin(phi) * Math.sin(theta) + 1.5
-      pos[i * 3 + 2] = distance * Math.cos(phi)
-      
-      pha[i] = Math.random() * Math.PI * 2
+      data.push({
+        orbit: THREE.MathUtils.randFloat(1.2, 4),
+        speed: THREE.MathUtils.randFloat(0.5, 2),
+        angle: Math.random() * Math.PI * 2,
+        verticalOffset: THREE.MathUtils.randFloat(-1, 1),
+        yBase: 1.5
+      })
     }
-    return [pos, pha]
+    return [data]
   }, [count])
+
+  const positions = useMemo(() => new Float32Array(count * 3), [count])
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
-    const array = pointsRef.current.geometry.attributes.position.array
-
-    for (let i = 0; i < count; i++) {
+    
+    particles.forEach((p, i) => {
       const i3 = i * 3
-      const phase = phases[i]
+      const currentAngle = p.angle + time * p.speed
       
-      // Subtle Orbiting/Drifting
-      array[i3] += Math.sin(time + phase) * 0.002
-      array[i3 + 1] += Math.cos(time + phase) * 0.002
-      array[i3 + 2] += Math.sin(time * 0.5 + phase) * 0.002
-    }
+      positions[i3] = Math.cos(currentAngle) * p.orbit
+      positions[i3 + 1] = p.yBase + Math.sin(time * 0.5 + p.angle) * p.verticalOffset
+      positions[i3 + 2] = Math.sin(currentAngle) * p.orbit
+    })
+    
     pointsRef.current.geometry.attributes.position.needsUpdate = true
-    pointsRef.current.rotation.y += 0.001
   })
 
   return (
@@ -45,16 +43,16 @@ const CoreParticles = () => {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={positions.length / 3}
+          count={count}
           array={positions}
           itemSize={3}
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.03}
+        size={0.04}
         color="#00F5FF"
         transparent
-        opacity={0.6}
+        opacity={0.8}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
       />
