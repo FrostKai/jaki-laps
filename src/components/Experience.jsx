@@ -1,18 +1,15 @@
-import { OrbitControls, PerspectiveCamera, Environment } from '@react-three/drei'
+import { PerspectiveCamera, Environment } from '@react-three/drei'
 import CommandCenter from './environment/CommandCenter'
 import AICore from './ai-core/AICore'
+import CameraRig from './camera/CameraRig'
 
 const Experience = () => {
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 4, 15]} fov={45} />
-      <OrbitControls 
-        enableDamping 
-        maxPolarAngle={Math.PI / 2} 
-        minDistance={5} 
-        maxDistance={25}
-        target={[0, 2, 0]}
-      />
+      <PerspectiveCamera makeDefault fov={45} />
+      
+      {/* Cinematic Camera Control */}
+      <CameraRig />
       
       <color attach="background" args={['#050816']} />
       
