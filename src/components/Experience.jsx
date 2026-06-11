@@ -1,20 +1,23 @@
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { OrbitControls, PerspectiveCamera, Environment } from '@react-three/drei'
+import CommandCenter from './environment/CommandCenter'
 
 const Experience = () => {
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-      <OrbitControls enableDamping />
+      <PerspectiveCamera makeDefault position={[0, 1, 8]} fov={50} />
+      <OrbitControls 
+        enableDamping 
+        maxPolarAngle={Math.PI / 2} 
+        minDistance={2} 
+        maxDistance={15}
+      />
       
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={1} color="#00F5FF" />
+      <color attach="background" args={['#050816']} />
       
-      <mesh>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#6C63FF" wireframe />
-      </mesh>
+      <CommandCenter />
       
-      <gridHelper args={[20, 20, "#00F5FF", "#050816"]} rotation={[Math.PI / 2, 0, 0]} />
+      {/* Global Environment for subtle reflections */}
+      <Environment preset="night" />
     </>
   )
 }
