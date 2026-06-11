@@ -2,12 +2,16 @@ import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react'
 import Experience from './components/Experience'
 import useStore from './store/useStore'
+import LoadingScreen from './components/loading/LoadingScreen'
 
 function App() {
+  const isLoaded = useStore((state) => state.isLoaded)
   const uiVisible = useStore((state) => state.uiVisible)
 
   return (
     <div className="w-full h-screen bg-bg relative">
+      {!isLoaded && <LoadingScreen />}
+
       {/* 3D Scene */}
       <Canvas
         shadows
@@ -20,8 +24,8 @@ function App() {
       </Canvas>
 
       {/* UI Overlay */}
-      {uiVisible && (
-        <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-8">
+      {isLoaded && uiVisible && (
+        <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-8 animate-fade-in">
           <header className="flex justify-between items-center pointer-events-auto">
             <h1 className="text-primary text-2xl font-bold tracking-widest uppercase">
               Jaki Labs <span className="text-white/20">|</span> Foundation
@@ -36,7 +40,7 @@ function App() {
             <div className="text-center">
               <div className="w-64 h-1 bg-gradient-to-r from-transparent via-primary to-transparent mb-4 opacity-50" />
               <p className="text-secondary text-xs tracking-[0.5em] uppercase animate-pulse">
-                Initializing Neural Interface
+                Neural Interface Active
               </p>
             </div>
           </main>
