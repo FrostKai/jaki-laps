@@ -1,28 +1,28 @@
-import { PerspectiveCamera, Environment } from '@react-three/drei'
-import CommandCenter from './environment/CommandCenter'
-import AICore from './ai-core/AICore'
-import CameraRig from './camera/CameraRig'
+import { PerspectiveCamera, Environment } from "@react-three/drei";
+import CommandCenter from "./environment/CommandCenter";
+import AICore from "./ai-core/AICore";
+import CameraRig from "./camera/CameraRig";
 
 const Experience = () => {
   return (
     <>
-      <PerspectiveCamera makeDefault fov={45} />
-      
-      {/* Cinematic Camera Control */}
+      <PerspectiveCamera
+        makeDefault
+        position={[0, 4, 15]}
+        fov={45}
+      />
+
       <CameraRig />
-      
-      <color attach="background" args={['#050816']} />
-      
-      {/* Structural Environment */}
+
+      <color attach="background" args={["#050816"]} />
+
       <CommandCenter />
-      
-      {/* Central Visual Masterpiece */}
+
       <AICore />
-      
-      {/* Global Environment for subtle reflections */}
+
       <Environment preset="night" />
     </>
-  )
-}
+  );
+};
 
-export default Experience
+export default Experience;
