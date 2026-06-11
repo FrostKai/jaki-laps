@@ -6,7 +6,9 @@ import ProjectLabel from './ProjectLabel'
 
 const ProjectNode = ({ name, status, type, orbitRadius, orbitSpeed, initialAngle, verticalOffset, isFlagship }) => {
   const nodeRef = useRef()
-  const meshRef = useRef()
+  const diamondRef = useRef()
+  const frameRef = useRef()
+  const scanRingRef = useRef()
   const [hovered, setHovered] = useState(false)
   
   useFrame((state) => {
@@ -23,10 +25,20 @@ const ProjectNode = ({ name, status, type, orbitRadius, orbitSpeed, initialAngle
     // Look at camera for label readability
     nodeRef.current.rotation.y = state.camera.rotation.y
 
-    // Subtle pulsing
-    const pulse = 1 + Math.sin(time * 2) * 0.05
-    if (meshRef.current) {
-        meshRef.current.scale.setScalar((hovered ? 1.3 : 1) * (isFlagship ? 1.5 : 1) * pulse)
+    // Diamond Rotation
+    if (diamondRef.current) {
+        diamondRef.current.rotation.y += (hovered ? 0.05 : 0.02)
+        diamondRef.current.rotation.z += 0.01
+    }
+
+    // Frame Rotation
+    if (frameRef.current) {
+        frameRef.current.rotation.z -= 0.01
+    }
+
+    // Scan Ring
+    if (scanRingRef.current) {
+        scanRingRef.current.position.y = Math.sin(time * 3) * 0.3
     }
   })
 
@@ -36,23 +48,34 @@ const ProjectNode = ({ name, status, type, orbitRadius, orbitSpeed, initialAngle
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-        {/* Holographic Node Sphere */}
-        <mesh ref={meshRef}>
-          <sphereGeometry args={[isFlagship ? 0.25 : 0.15, 32, 32]} />
+      <Float speed={3} rotationIntensity={0.2} floatIntensity={0.5}>
+        {/* Layer 1: Diamond Core */}
+        <mesh ref={diamondRef} scale={(hovered ? 1.4 : 1) * (isFlagship ? 1.2 : 1)}>
+          <octahedronGeometry args={[0.15, 0]} />
           <meshStandardMaterial 
             color={isFlagship ? "#00F5FF" : (hovered ? "#00F5FF" : "#6C63FF")}
             emissive={isFlagship ? "#00F5FF" : (hovered ? "#00F5FF" : "#6C63FF")}
-            emissiveIntensity={isFlagship ? (hovered ? 8 : 4) : (hovered ? 4 : 2)}
-            transparent
-            opacity={0.8}
+            emissiveIntensity={hovered ? 10 : 3}
+            metalness={1}
+            roughness={0}
           />
         </mesh>
         
-        {/* Orbiting Ring for Node */}
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-            <ringGeometry args={[isFlagship ? 0.3 : 0.2, isFlagship ? 0.32 : 0.22, 32]} />
-            <meshBasicMaterial color="#00F5FF" transparent opacity={0.4} side={THREE.DoubleSide} />
+        {/* Layer 2: Hexagonal Frame */}
+        <mesh ref={frameRef} rotation={[0, 0, 0]}>
+            <circleGeometry args={[0.3, 6]} />
+            <meshBasicMaterial 
+                color={hovered ? "#00F5FF" : "#6C63FF"} 
+                transparent 
+                opacity={0.2} 
+                wireframe 
+            />
+        </mesh>
+
+        {/* Layer 3: Scanning Ring */}
+        <mesh ref={scanRingRef} rotation={[Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[0.35, 0.36, 32]} />
+            <meshBasicMaterial color="#00F5FF" transparent opacity={hovered ? 0.8 : 0.2} side={THREE.DoubleSide} />
         </mesh>
 
         {/* Labels */}
@@ -61,6 +84,7 @@ const ProjectNode = ({ name, status, type, orbitRadius, orbitSpeed, initialAngle
             status={status} 
             type={type} 
             hovered={hovered} 
+            isFlagship={isFlagship}
         />
       </Float>
     </group>

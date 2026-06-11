@@ -2,6 +2,7 @@ import { PerspectiveCamera, Environment } from "@react-three/drei";
 import CommandCenter from "./environment/CommandCenter";
 import AICore from "./ai-core/AICore";
 import CameraRig from "./camera/CameraRig";
+import NavigationHub from "./navigation/NavigationHub";
 
 const Experience = () => {
   return (
@@ -14,11 +15,11 @@ const Experience = () => {
 
       <CameraRig />
 
-      <color attach="background" args={["#050816"]} />
-
       <CommandCenter />
 
       <AICore />
+
+      <NavigationHub />
 
       <Environment preset="night" />
     </>

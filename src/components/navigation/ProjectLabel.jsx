@@ -11,7 +11,7 @@ const ProjectLabel = ({ name, status, type, hovered }) => {
         anchorY="middle"
         outlineWidth={0.01}
         outlineColor="#050816"
-        font="https://fonts.gstatic.com/s/orbitron/v31/yY7Hc09SNo59p73MpkZ8u7mEkkQ2.woff"
+       
       >
         {name.toUpperCase()}
       </Text>
@@ -24,7 +24,7 @@ const ProjectLabel = ({ name, status, type, hovered }) => {
         anchorX="center"
         anchorY="middle"
         opacity={0.8}
-        font="https://fonts.gstatic.com/s/orbitron/v31/yY7Hc09SNo59p73MpkZ8u7mEkkQ2.woff"
+       
       >
         {status}
       </Text>
@@ -37,7 +37,7 @@ const ProjectLabel = ({ name, status, type, hovered }) => {
         anchorX="center"
         anchorY="middle"
         opacity={0.5}
-        font="https://fonts.gstatic.com/s/orbitron/v31/yY7Hc09SNo59p73MpkZ8u7mEkkQ2.woff"
+       
       >
         {type}
       </Text>
