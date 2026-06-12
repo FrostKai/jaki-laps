@@ -53,6 +53,22 @@ canvas {
   .animate-fade-in {
     animation: fadeIn 1s ease-out forwards;
   }
+
+  .animate-scanline {
+    animation: scanline 8s linear infinite;
+  }
+
+  .animate-flicker {
+    animation: flicker 5s infinite;
+  }
+
+  .animate-pulse-reactor {
+    animation: pulseReactor 0.628s ease-in-out infinite alternate;
+  }
+
+  .animate-pulse-reactor-red {
+    animation: pulseReactorRed 0.628s ease-in-out infinite alternate;
+  }
 }
 
 @keyframes spin {
@@ -69,3 +85,42 @@ canvas {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes flicker {
+  0%, 19.99%, 22%, 62.99%, 64%, 64.99%, 70%, 100% {
+    opacity: 0.99;
+    filter: brightness(1);
+  }
+  20%, 21.99%, 63%, 63.99%, 65%, 69.99% {
+    opacity: 0.88;
+    filter: brightness(1.15) contrast(1.1);
+  }
+}
+
+@keyframes pulseReactor {
+  0% {
+    border-color: rgba(0, 245, 255, 0.15);
+    box-shadow: 0 0 5px rgba(0, 245, 255, 0.05), inset 0 0 5px rgba(0, 245, 255, 0.02);
+  }
+  100% {
+    border-color: rgba(0, 245, 255, 0.45);
+    box-shadow: 0 0 18px rgba(0, 245, 255, 0.25), inset 0 0 12px rgba(0, 245, 255, 0.1);
+  }
+}
+
+@keyframes pulseReactorRed {
+  0% {
+    border-color: rgba(255, 77, 109, 0.15);
+    box-shadow: 0 0 5px rgba(255, 77, 109, 0.05), inset 0 0 5px rgba(255, 77, 109, 0.02);
+  }
+  100% {
+    border-color: rgba(255, 77, 109, 0.45);
+    box-shadow: 0 0 18px rgba(255, 77, 109, 0.25), inset 0 0 12px rgba(255, 77, 109, 0.1);
+  }
+}
+

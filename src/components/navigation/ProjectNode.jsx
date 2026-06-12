@@ -1,15 +1,32 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Float, MeshDistortMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 import ProjectLabel from './ProjectLabel'
+import useStore from '../../store/useStore'
+import { projectsData } from '../../store/projectData'
 
 const ProjectNode = ({ name, status, type, orbitRadius, orbitSpeed, initialAngle, verticalOffset, isFlagship }) => {
+  const setSelectedProject = useStore((state) => state.setSelectedProject)
+  const setActiveTab = useStore((state) => state.setActiveTab)
+  
   const nodeRef = useRef()
   const diamondRef = useRef()
   const frameRef = useRef()
   const scanRingRef = useRef()
   const [hovered, setHovered] = useState(false)
+
+  // Cursor style pointer on hover
+  useEffect(() => {
+    if (hovered) {
+      document.body.style.cursor = 'pointer'
+    } else {
+      document.body.style.cursor = 'auto'
+    }
+    return () => {
+      document.body.style.cursor = 'auto'
+    }
+  }, [hovered])
   
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
@@ -47,6 +64,15 @@ const ProjectNode = ({ name, status, type, orbitRadius, orbitSpeed, initialAngle
       ref={nodeRef}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
+      onClick={(e) => {
+        e.stopPropagation()
+        const projectKey = name.toLowerCase()
+        const projectInfo = projectsData[projectKey]
+        if (projectInfo) {
+          setSelectedProject(projectInfo)
+          setActiveTab('projects')
+        }
+      }}
     >
       <Float speed={3} rotationIntensity={0.2} floatIntensity={0.5}>
         {/* Layer 1: Diamond Core */}
@@ -92,3 +118,4 @@ const ProjectNode = ({ name, status, type, orbitRadius, orbitSpeed, initialAngle
 }
 
 export default ProjectNode
+
